@@ -40,6 +40,9 @@ router.post('/app', async function(req, res, _next) {
       headers: {'Authorization': process.env.APP_TOKEN},
     })).data.channel.name.replace('sd-', '');
     const [turma, tribo] = name.split('-tribo-');
+    await fs.writeFile(path.join(__dirname, `agendas/data${turma}${tribo}.json`), JSON.stringify(req.body), (err) => {
+      if (err) throw err;
+      });
     if (false && Math.abs(new Date().getTime() / 1000) - timestamps > 60 * 5) return res.status(408).json({ message: 'Request Timeout' });
     if (token !== process.env.SLACK_TOKEN) return res.status(401).json({message: 'Wrong token'});
     if (!blocks[0].elements) return res.status(400).json({ message: 'Wrong format!' })
@@ -73,20 +76,12 @@ router.post('/app', async function(req, res, _next) {
     })
     const data = JSON.stringify(extensionFormat)
     await fs.writeFile(path.join(__dirname, `agendas/data${turma}${tribo}.json`), data, (err) => {
-      const error = JSON.stringify({ err })
-      fs.writeFile(path.join(__dirname, `agendas/data${turma}${tribo}.json`), error, (err) => {
-        if (err) throw err;
-        });
       if (err) throw err;
       });
     // postRoutine('Os alarmes ja foram atualizados! entre nesse link e não perca nenhum momento: http://localhost:3000');
     return res.status(201).json(extensionFormat);
   } catch (e) {
-    const data = JSON.stringify({ message: e.message + ' writing file' })
-    fs.writeFile(path.join(__dirname, `agendas/data${turma}${tribo}.json`), data, (err) => {
-      if (err) throw err;
-      });
-    return res.status(500).json(data);
+    return res.status(500).json({ message: e.message + ' writing file' });
   }
 })
 
