@@ -42,7 +42,7 @@ router.post('/app', async function(req, res, _next) {
     const [turma, tribo] = name.split('-tribo-');
     if (false && Math.abs(new Date().getTime() / 1000) - timestamps > 60 * 5) return res.status(408).json({ message: 'Request Timeout' });
     if (token !== process.env.SLACK_TOKEN) return res.status(401).json({message: 'Wrong token'});
-    if (blocks[0].elements) return res.status(400).json({ message: 'Wrong format!' })
+    if (!blocks[0].elements) return res.status(400).json({ message: 'Wrong format!' })
     const elements = blocks[0].elements.map((e) => e.elements).filter(a => a[0].text.match(regex))[0]
     .filter((m) => m.style).filter(m => m.type !== 'emoji').filter(m => !m.style.italic);
     const agenda = elements.reduce((a, c) => {
