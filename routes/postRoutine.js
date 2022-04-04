@@ -1,7 +1,7 @@
 var fetch = require('node-fetch');
 
 const post = (text) => {
-  fetch('https://hooks.slack.com/services/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', {
+  fetch('https://hooks.slack.com/services/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', {
     method: 'POST',
     headers: {
         'Content-type': 'application/json'
