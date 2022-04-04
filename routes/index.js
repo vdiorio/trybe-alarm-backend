@@ -73,6 +73,10 @@ router.post('/app', async function(req, res, _next) {
     })
     const data = JSON.stringify(extensionFormat)
     await fs.writeFile(path.join(__dirname, `agendas/data${turma}${tribo}.json`), data, (err) => {
+      const error = JSON.stringify({ err })
+      await fs.writeFile(path.join(__dirname, `agendas/data${turma}${tribo}.json`), error, (err) => {
+        if (err) throw err;
+        });
       if (err) throw err;
       });
     // postRoutine('Os alarmes ja foram atualizados! entre nesse link e não perca nenhum momento: http://localhost:3000');
