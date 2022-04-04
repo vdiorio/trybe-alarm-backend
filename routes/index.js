@@ -73,9 +73,10 @@ router.post('/app', async function(req, res, _next) {
     })
     const data = JSON.stringify(extensionFormat)
     await fs.writeFile(path.join(__dirname, `agendas/data${turma}${tribo}.json`), data, (err) => {
+      return res.status(500).json('Deu ruim aqui no writefile msm')
       if (err) throw err;
       });
-    postRoutine('Os alarmes ja foram atualizados! entre nesse link e não perca nenhum momento: http://localhost:3000');
+    // postRoutine('Os alarmes ja foram atualizados! entre nesse link e não perca nenhum momento: http://localhost:3000');
     return res.status(201).json(extensionFormat);
   } catch (e) {
     return res.status(500).json({ message: e.message + ' writing file' });
